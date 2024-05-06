@@ -1,16 +1,17 @@
 "use client";
-// * imports
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getQRCode } from "@/redux/actions/qrCodeAction";
 import Link from "next/link";
 import Button from "@/components/UI/form-button";
-import { getQRCode } from "@/redux/actions/qrCodeAction";
-
+import {QRCodeSVG} from 'qrcode.react';
 import GoogleImg from "@/public/images/google.svg";
 import AppleImg from "@/public/images/apple.svg";
 import QRImg from "@/public/images/QRCode.svg";
+import Toast  from "../../../components/Toast/Toast";
 
+import axios from "axios";
 const FirstTimeLoginPage = () => {
   const dispatch = useDispatch();
   const qrCodeUrl = useSelector((state) => state.qrCodeUrl);
@@ -18,6 +19,7 @@ const FirstTimeLoginPage = () => {
   const otpRefs = useRef([]);
   const [otpValue, setOtpValue] = useState("");
 
+ 
   const handleInputChange = (e, index) => {
     const newValue = otpValue + e.target.value;
     setOtpValue(newValue);
@@ -38,11 +40,53 @@ const FirstTimeLoginPage = () => {
     otpRefs.current[0].focus();
   }, []);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
+  const code = localStorage.getItem("qrcode")
 
-  console.log("QR Code URL:", qrCodeUrl); // Log the qrCodeUrl
+  console.log("QR Code URL:", qrCodeUrl); 
+
+
+
+  const handleContinue = () => {
+    const userDataString = localStorage.getItem("userData");
+    if (!userDataString) {
+      setError("User data not found in local storage");
+      return;
+    }
+  
+    const userData = JSON.parse(userDataString).tokenDto;
+    const emailId = userData.emailId;
+    const memberId = userData.accountId;
+    const totp = otpValue;
+    console.log("usman" , emailId , memberId , otpValue)
+  
+    axios
+      .post("https://oxygentestenv01.oxygen-global.com/cardholderadmin/gAuth/validate/totp", {
+        email: emailId, // Corrected to match the API's expected key
+        userId: memberId, // Corrected to match the API's expected key
+        totp: totp,
+      })
+      .then((response) => {
+        Toast( "sucess" ,'verification successful');
+       
+        console.log("TOTP verification successful");
+        window.location.href = '/forgot-password/new-password';
+        // Router.push('/forgot-password/new-password')
+      })
+      .catch((error) => {
+        Toast( "err" , 'verification failed , InValid OTP');
+        console.error("Error verifying TOTP:", error);
+        setError("Failed to verify TOTP");
+      });
+  };
+  
+// if (error) {
+//   return <div>Error: {error}</div>;
+// }
+
+  
 
   return (
     <>
@@ -100,20 +144,20 @@ const FirstTimeLoginPage = () => {
                     Scan QR code with the App
                   </h1>
                   <span className="flex flex-wrap items-center justify-start w-full h-auto gap-x-1">
-                    If your device does not support QR codes, Input a secret
-                    key given below the QR code manually into your Authenticator
+                    If your device does not support QR codes, Input a secret key
+                    given below the QR code manually into your Authenticator
                     App.
                   </span>
                 </div>
                 <div className="flex items-center justify-start w-full h-auto gap-1">
                   <div className="w-[40%] h-32">
-                    <Image
-                      src={QRImg}
-                      alt=""
-                      width={500}
-                      height={500}
-                      className="object-contain w-auto h-full"
-                    />
+                  <img src={`data:image/png;base64,${code}`} alt="QR Code" width={500} height={500} className="object-contain w-auto h-full" />
+
+                    {/* <div className="flex items-center justify-start w-full h-auto gap-1">
+                      <div className="w-[40%] h-32">
+                        {qrCodeUrl && <QRCodeSVG value="" size={225} />}
+                      </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -163,7 +207,8 @@ const FirstTimeLoginPage = () => {
                     Enter the via third- a authenticator
                   </h1>
                   <span className="">
-                    Please use your authentication app (such as Duo or Google Authenticator) to scan this QR code.
+                    Please use your authentication app (such as Duo or Google
+                    Authenticator) to scan this QR code.
                   </span>
                 </div>
                 <div className="w-full h-auto flex flex-col justify-center md:justify-start gap-4 items-center md:items-start text-[#334155] text-base font-normal leading-5">
@@ -194,8 +239,9 @@ const FirstTimeLoginPage = () => {
               <div className="md:min-w-[30%] min-w-[10vw] max-w-[40%] h-auto ">
                 {qrCodeUrl && (
                   <>
-                    <img src={qrCodeUrl} alt="QR Code" className="w-full h-auto" />
-                    <p>QR Code URL: {qrCodeUrl}</p> {/* Add console log here */}
+                                     <img src={`data:image/png;base64,${code}`} alt="QR Code" width={500} height={500} className="object-contain w-auto h-full" />
+
+                              <p>QR Code URL: {code}</p> {/* Add console log here */}
                   </>
                 )}
               </div>
@@ -203,10 +249,11 @@ const FirstTimeLoginPage = () => {
 
             <div className="w-[40%] max-md:mx-auto h-auto">
               <Link
-                href={"/forgot-password/new-password"}
+                // href={"/forgot-password/new-password"}
+                href={''}
                 className="w-full h-auto "
               >
-                <Button>Continue</Button>
+                <Button onClick={handleContinue}>Continue</Button>
               </Link>
             </div>
           </div>

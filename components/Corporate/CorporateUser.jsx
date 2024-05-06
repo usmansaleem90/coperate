@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import dp from "@/public/images/tableDP.png";
 import Image from "next/image";
@@ -9,42 +9,9 @@ import { usePathname } from "next/navigation";
 import { CiSearch } from "react-icons/ci";
 import { MdOutlineExpandMore } from "react-icons/md";
 import { GoPlus } from "react-icons/go";
-import axios from "axios";
+
 
 const CorporateUser = () => {
-  useEffect(() => {
-    allUser();
-  }, []);
-
-  const allUser = async () => {
-
-    const userDataString = localStorage.getItem("userData");
-    const userData = JSON.parse(userDataString);
-    const tokenDto = userData.tokenDto;
-    const token = tokenDto.token;
-    const clientId = tokenDto.clientId;
-    const clientsecret = tokenDto.clientSecret;
-
-
-
-    try {
-
-      const headers = {
-        'Authorization': token,
-        'clientId': clientId,
-        'clientSecret': clientsecret
-      };
-      const response = await axios.get('https://oxygentestenv01.oxygen-global.com/cardholderadmin/public/private/list/listAllApplicationUsersByAccountId', {
-        headers: headers
-      });
-      const data = response.data;
-      console.log("object", data); // Assuming you want to do something with the fetched data
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      // Handle the error here, e.g., show a message to the user or log it
-    }
-  };
-
   const [activeBtn, setActiveBtn] = useState(false);
   const [activeBtnIndex, setActiveBtnIndex] = useState(0);
 
@@ -66,15 +33,10 @@ const CorporateUser = () => {
 
           {/* buttons */}
           <div className="w-auto h-auto flex justify-start items-stretch sm:gap-[15px] gap-2">
-            <div className="bg-[#F1F5F9] flex items-center rounded-md gap-2 py-1 px-2">
+
+            <div className="bg-[#F1F5F9] flex items-center rounded-md gap-2 py-1 px-2" >
               <CiSearch className="text-2xl" />
-              <input
-                type="text"
-                placeholder="Search Something..."
-                className="md:block hidden h-9 outline-none bg-transparent"
-                name=""
-                id=""
-              />
+              <input type="text" placeholder="Search Something..." className="md:block hidden h-9 outline-none bg-transparent" name="" id="" />
             </div>
 
             <div class="relative h-full bg-[#F1F5F9] rounded-md">
@@ -83,14 +45,16 @@ const CorporateUser = () => {
                 <option>Option 1</option>
                 <option>Option 2</option>
                 <option>Option 3</option>
+
               </select>
               <MdOutlineExpandMore className="text-2xl absolute md:right-5 right-3  top-1/2 transform -translate-y-1/2 text-black" />
             </div>
 
-            <div className="bg-[#0D4C7B] flex gap-1 items-center text-white sm:px-4 px-2 rounded-md">
-              <GoPlus className=" text-xl" />
+            <div className="bg-[#0D4C7B] flex gap-1 items-center text-white sm:px-4 px-2 rounded-md" >
+            <GoPlus className=" text-xl" />
               <span className="sm:block hidden">Add New User</span>
             </div>
+
           </div>
         </div>
 
@@ -297,11 +261,10 @@ const CorporateUser = () => {
               if (idx < 4 || idx === 9) {
                 return (
                   <button
-                    className={`w-8 h-8 font-semibold text-[13px] transition-all duration-100 rounded-lg border border-[#F1F1F1] flex justify-center items-center ${
-                      activeBtn && activeBtnIndex === idx
-                        ? "bg-[#2F80ED] text-white"
-                        : "bg-white text-[#333333]"
-                    }`}
+                    className={`w-8 h-8 font-semibold text-[13px] transition-all duration-100 rounded-lg border border-[#F1F1F1] flex justify-center items-center ${activeBtn && activeBtnIndex === idx
+                      ? "bg-[#2F80ED] text-white"
+                      : "bg-white text-[#333333]"
+                      }`}
                     key={idx}
                     onClick={() => {
                       setActiveBtnIndex(idx);

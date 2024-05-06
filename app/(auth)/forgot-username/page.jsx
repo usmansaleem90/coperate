@@ -1,6 +1,7 @@
 // ForgetUsernamePage.js
 "use client"
 import AuthWrapper from "@/components/Auth/Auth-Wrapper";
+
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { LoginRequest } from "@/redux/actions/forgetUsernameActions";
@@ -10,8 +11,11 @@ import FormInputWrapper from "@/components/UI/form-input-wrapper";
 import LabelWrapper from "@/components/UI/label-wrapper";
 import InputWrapper from "@/components/UI/input-wrapper";
 import Button from "@/components/UI/form-button";
+import Toast from "@/components/Toast/Toast";
 import Link from "next/link";
-
+import axios from 'axios';
+import { toast } from "react-toastify";
+import { Router } from "react-router-dom";
 const ForgetUsernamePage = () => {
   const otpRefs = useRef([]);
   const dispatch = useDispatch();
@@ -19,11 +23,43 @@ const ForgetUsernamePage = () => {
   const [otpValue, setOtpValue] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+       e.preventDefault();
 
-    // Dispatch login request action with email and OTP
-    dispatch(LoginRequest(email, otpValue));
+      if (!email) {
+        Toast('err','Please Enter Email')
+        return;
+      }
+      if (!otpValue) {
+        Toast('err','Please Enter OTP')
+        return;
+      }
+
+    axios.post("https://oxygentestenv01.oxygen-global.com/cardholderadmin/corporateOrdering/validate/totp/ForgotUserId", {
+      email: email,
+      totp: otpValue
+    })
+    .then((response) => {
+      Toast( "sucess" ,"verification successful , Username sent to your email")
+      console.log("TOTP verification successful");
+      window.location.href = '/login';
+    })
   };
+
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   if (!email) {
+  //     Toast('err','Please Enter Email')
+  //     return;
+  //   }
+  //   if (!otpValue) {
+  //     Toast('err','Please Enter OTP')
+  //     return;
+  //   }
+  //   // Dispatch login request action with email and OTP
+  //   dispatch(LoginRequest(email, otpValue));
+  // };
 
   const handleInputChange = (e, index) => {
     const newValue = otpValue.substr(0, index) + e.target.value + otpValue.substr(index + 1);

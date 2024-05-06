@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Toast from '../../components/Toast/Toast';
 
 // Action Types
 export const NEW_PASSWORD_REQUEST = 'NEW_PASSWORD_REQUEST';
@@ -31,21 +32,26 @@ export const changePassword = (password, totp,router) => {
         );
       }
 
-      const userData = JSON.parse(localStorage.getItem('userData'));
-      if (!userData || !userData.accountId) {
-        throw new Error('User data not found in local storage or missing userId');
+      const userDataString = localStorage.getItem("userData");
+      if (!userDataString) {
+        setError("User data not found in local storage");
+        return;
       }
+    
+      const userData = JSON.parse(userDataString).tokenDto;
+      const userId = userData.accountId;
 
       // Make API call to change password
       const response = await axios.post('https://oxygentestenv01.oxygen-global.com/cardholderadmin/corporateOrdering/validate/totp/ForgotPassword', {
         password,
         totp,
-        userId: userData.accountId, // Use userId from user data
+        userId:userId, // Use userId from user data
       });
       dispatch(newPasswordSuccess());
+      Toast("sucess" , "Password Changed Sucessfully")
       console.log('Password changed successfully!');
       console.log('Response:', response.data);
-      router.push('/login')
+      router.push('/')
     } catch (error) {
       dispatch(newPasswordFailure(error.message, password, totp, localStorage.getItem('userId')));
       console.error('Error changing password:', error.message);

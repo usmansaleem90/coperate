@@ -15,6 +15,8 @@ import InputWrapper from "@/components/UI/input-wrapper";
 import Button from "@/components/UI/form-button";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import Toast  from "../../../components/Toast/Toast";
+
 
 const ForotPasswordPage = () => {
   const router=useRouter();
@@ -23,7 +25,9 @@ const ForotPasswordPage = () => {
   const [username, setUsername] = useState('');
 
   const handleForgotPassword = () => {
-    dispatch(forgotPasswordRequest(username,router));
+    Toast( "err" ,'No UserName Found');
+
+    // dispatch(forgotPasswordRequest(username,router));
     console.log(username);
   };
   

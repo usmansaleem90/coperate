@@ -66,16 +66,12 @@ export const getQRCode = () => {
           'Content-Type': 'application/json',
         },
       });
-<<<<<<< Updated upstream
+        if(response){
 
-=======
-        if (response) {
-
-        const responseData = await response.json();
-        const qrCodeUrl = responseData.qrCode;
-        localStorage.setItem("qrcode", qrCodeUrl)
-      }
->>>>>>> Stashed changes
+          const responseData = await response.json();
+          const qrCodeUrl = responseData.qrCode;
+          localStorage.setItem("qrcode" , qrCodeUrl)
+        }
       if (!response.ok) {
         let errorMessage = 'Unknown error occurred';
         if (response.status === 401) {
@@ -86,10 +82,11 @@ export const getQRCode = () => {
         throw new Error(errorMessage);
       }
 
-      const responseData = await response.json();
-      const qrCodeUrl = responseData.qrCode;
+      // const responseData = await response.json();
+      // const qrCodeUrl = responseData.qrCode;
+      // localStorage.setItem("qrcode" , qrCodeUrl)
       dispatch(fetchQRCodeSuccess(qrCodeUrl));
-      console.log("QR Code URL:", qrCodeUrl);
+      console.log("QR Code URL correct:", qrCodeUrl);
     } catch (error) {
       console.error("Error:", error);
       dispatch(fetchQRCodeFailure(error.message));

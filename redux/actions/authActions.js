@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Toast  from "../../components/Toast/Toast";
 
 // Action creators
 export const loginRequest = () => ({
@@ -43,15 +44,18 @@ export const loginUser = (userName, password, router) => {
         
         // Navigating to different pages based on conditions
         if (response.data.tokenDto.googleAuthenticationEnabled === false) {
-          // If Google authentication is disabled, navigate to first-time-login
+          Toast( "sucess" ,'Login sucessfully');
+
           router.push("/first-time-login");
+          
         } else {
-          // If Google authentication is enabled, navigate to verify-totp
+          Toast( "sucess" ,'Login sucessfully');
+
           router.push("/login/two-factor");
         }
       })
       .catch((error) => {
-        // Handling errors during login
+       Toast("err" ,"Invalid email and password")
         console.error("Error during login request:", error);
         
         // Dispatching an action to indicate login failure

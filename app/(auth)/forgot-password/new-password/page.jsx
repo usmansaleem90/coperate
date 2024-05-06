@@ -32,7 +32,7 @@ const NewPasswordPage = () => {
     setTotp(newTotp);
   };
   
-  // Use useEffect to focus on the first input field when the component mounts
+
   useEffect(() => {
     otpRefs.current[0].focus();
   }, []);
@@ -40,7 +40,6 @@ const NewPasswordPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      // Passwords don't match, handle accordingly (maybe display an error message)
       return;
     }
     dispatch(changePassword(password, totp,router));

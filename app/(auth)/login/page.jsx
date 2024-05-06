@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import AuthWrapper from "@/components/Auth/Auth-Wrapper";
@@ -12,20 +12,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "@/redux/actions/authActions";
-
+import Toast from "../../../components/Toast/Toast";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-<<<<<<< Updated upstream
-  const { isLoading, isAuthenticated, error } = useSelector(
-    (state) => state.auth
-  );
-  const router = useRouter();
-  const [userName, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (event) => {
-=======
+  // const { isLoading, isAuthenticated, error } = useSelector(
+  //   (state) => state.auth
+  // );
   const router = useRouter();
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,17 +35,23 @@ const LoginPage = () => {
       return;
     }
 
->>>>>>> Stashed changes
-    event.preventDefault();
-    dispatch(loginUser(userName, password, router));
-  };
-<<<<<<< Updated upstream
-  
-  
-  
-=======
+    // if (error) {
+    //   Toast("err", "Invalid Email and Password");
+    //   return;
+    // }
 
->>>>>>> Stashed changes
+    event.preventDefault();
+    try {
+      dispatch(loginUser(userName, password, router));
+    } catch (error) {
+      return "err", error;
+    }
+  };
+
+  // Display the error message from state
+  // useEffect(() => {
+
+  // }, [error]);
 
   return (
     <AuthWrapper>
@@ -98,8 +97,8 @@ const LoginPage = () => {
           </FormInputWrapper>
 
           <Button onClick={handleSubmit}>Login</Button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {isLoading && <p>Loading...</p>}
+          {/* {error && <p style={{ color: "red" }}>{loginErr}</p>}
+          {isLoading && <p>Loading...</p>} */}
         </div>
       </div>
     </AuthWrapper>

@@ -1,6 +1,7 @@
 'use client'
 // * imports
 import React, { useState } from "react";
+import { useSelector, } from 'react-redux'; // Import the useSelector hook to access state from the Redux store
 
 // * local imports
 import Logo from "@/public/images/logo.svg";
@@ -12,18 +13,29 @@ import { usePathname, useRouter } from "next/navigation";
 import { MdExpandMore } from "react-icons/md";
 import arrow from '@/public/images/buttonArrow.svg'
 import { AiOutlineClose } from "react-icons/ai";
+import { Router } from "react-router-dom";
 
 
 const Sidebar = ({ onClick }) => {
-
+    const {isAuthenticated} = useSelector(
+        (state) => state.auth
+      );
+    
     const [openSubmenu, setOpenSubmenu] = useState(false);
     const [showSiderbar, setShowSidebar] = useState(false);
 
     const location = usePathname()
-
+  
     const isActive = (path) => {
         return location === path;
     };
+    const isLogout = () => {
+        localStorage.removeItem('qrcode')
+        localStorage.removeItem('ally-supports-cache')
+        localStorage.removeItem('userData')
+        window.location.href='/login'
+    };
+
 
     const handleOpenSubmenu = () => {
         setOpenSubmenu(!openSubmenu)
@@ -209,6 +221,40 @@ const Sidebar = ({ onClick }) => {
                     </div>
 
                     <div className={`flex-col items-start text-[#52525B] font-medium text-sm justify-start ${showSiderbar ? 'w-fit' : 'w-full'} h-auto space-y-[16px]`}>
+                        <button className="flex items-center justify-start w-full h-auto gap-2 text-start">
+                            <svg
+                                width="23"
+                                height="23"
+                                viewBox="0 0 29 29"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M20.541 22.2697H15.7077L10.3306 25.8463C9.53308 26.378 8.45768 25.8101 8.45768 24.8434V22.2697C4.83268 22.2697 2.41602 19.853 2.41602 16.228V8.97795C2.41602 5.35295 4.83268 2.93628 8.45768 2.93628H20.541C24.166 2.93628 26.5827 5.35295 26.5827 8.97795V16.228C26.5827 19.853 24.166 22.2697 20.541 22.2697Z"
+                                    stroke="#52525B"
+                                    stroke-width="1.5"
+                                    stroke-miterlimit="10"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M14.4999 13.7267V13.473C14.4999 12.6513 15.0075 12.2163 15.515 11.8659C16.0104 11.5275 16.5057 11.0926 16.5057 10.2951C16.5057 9.18339 15.6116 8.28918 14.4999 8.28918C13.3883 8.28918 12.4941 9.18339 12.4941 10.2951"
+                                    stroke="#52525B"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M14.4952 16.6145H14.5061"
+                                    stroke="#52525B"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+
+                            <h1 onClick={isLogout} className={`${showSiderbar ? 'hidden' : 'block'}`}>Logout</h1>
+                        </button>
                         <button className="flex items-center justify-start w-full h-auto gap-2 text-start">
                             <svg
                                 width="23"

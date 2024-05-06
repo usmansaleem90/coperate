@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { verifyOTP } from '@/redux/actions/TwoFactorActions';
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from 'next/navigation';
-
+import Toast  from "../../../../components/Toast/Toast";
 const TwoFactorPage = () => {
   const router=useRouter();
   const dispatch = useDispatch();
@@ -27,10 +27,15 @@ const TwoFactorPage = () => {
 
 
   const handleSubmit = () => {
-    console.log("btn is clicked");
+   if(!otpValue){
+    Toast('err',"Please Enter Security Key ")
+    return;
+   }
+
     setLoading(true);
     dispatch(verifyOTP(otpValue, router))
       .then((response) => {
+
         console.log("Request successful:", response);
         setLoading(false);
         // Handle success response

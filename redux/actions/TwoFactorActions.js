@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Toast  from "../../components/Toast/Toast";
 
 // Action types
 export const VERIFY_OTP_REQUEST = 'VERIFY_OTP_REQUEST';
@@ -20,6 +21,7 @@ export const verifyOTPFailure = (error) => ({
 });
 export const verifyOTP = (otpValue, router) => {
   return async (dispatch) => {
+    //   Toast( "sucess" ,'Login sucessfully');
       console.log("OTP verification initiated");
 
       // Retrieve email and userId from local storage
@@ -49,6 +51,7 @@ export const verifyOTP = (otpValue, router) => {
 
       try {
           console.log("Sending OTP verification request...");
+        //   Toast( "sucess" ,'Login sucessfully');
           const response = await axios.post(
               'https://oxygentestenv01.oxygen-global.com/cardholderadmin/gAuth/validate/totp',
               tokenDto
@@ -60,40 +63,23 @@ export const verifyOTP = (otpValue, router) => {
           if (response.status === 200) {
               if (response.data) {
                   console.log('OTP is valid');
+                  Toast('sucess','Valid OTP')
                   dispatch(verifyOTPSuccess());
                   router.push("/");
               } else {
-<<<<<<< Updated upstream
                   console.log('OTP is invalid');
+                  Toast('err','Invalid OTP')
                   const errorMsg = "OTP is invalid";
                   console.error(errorMsg);
                   dispatch(verifyOTPFailure(errorMsg));
-=======
-                router.push("/");
-                alert('oara')
-                //   console.log('OTP is invalid');
-                //   Toast('err','Invalid OTP')
-                //   const errorMsg = "OTP is invalid";
-                //   console.error(errorMsg);
-                //   dispatch(verifyOTPFailure(errorMsg));
-                console.log('OTP is valid');
-                Toast('sucess','Valid OTP')
-                dispatch(verifyOTPSuccess());
-                router.push("/");
-               
->>>>>>> Stashed changes
               }
           } else {
-            router.push("/");
-
               // Handle non-200 status code
               const errorMsg = `Received non-200 status code: ${response.status}`;
               console.error(errorMsg);
               dispatch(verifyOTPFailure(errorMsg));
           }
       } catch (error) {
-        router.push("/");
-
           console.error("Error during OTP verification:", error);
           // Check for network errors
           if (error.response) {
