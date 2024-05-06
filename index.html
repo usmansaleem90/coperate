@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Data Display</title>
+</head>
+<body>
+  <h1>API Data</h1>
+  <div id="apiData"></div>
+
+  <script>
+    // Define your username and password
+    const userName = 'huzaifa';
+    const password = 'jUe+!2Tt2Hhl';
+
+    // Make a POST request with username and password
+    fetch('https://oxygentestenv01.oxygen-global.com/cardholderadmin/public/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // Add any other headers required by your API
+      },
+      body: JSON.stringify({
+        userName: userName,
+        password: password
+      }),
+    })
+    .then(response => {
+      // Check if the request was successful (status code 200)
+      if (response.ok) {
+        // Parse the JSON response
+        return response.json();
+      } else {
+        // If there was an error, throw an error
+        throw new Error('Failed to authenticate');
+      }
+    })
+    .then(data => {
+      // Display the retrieved data on the webpage
+      const apiDataElement = document.getElementById('apiData');
+      apiDataElement.innerHTML = JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+      // Handle any errors that occurred during the fetch
+      console.error('Error:', error);
+    });
+  </script>
+</body>
+</html>
