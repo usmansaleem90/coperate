@@ -44,7 +44,7 @@ const FirstTimeLoginPage = () => {
   //   return <div>Error: {error}</div>;
   // }
   if (typeof window !== 'undefined' && window.localStorage) {
-  const code = window.localstorage.getItem("qrcode")}
+  var code = window.localstorage.getItem("qrcode")}
 
   console.log("QR Code URL:", qrCodeUrl); 
 

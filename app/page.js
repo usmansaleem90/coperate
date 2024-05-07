@@ -12,8 +12,8 @@ import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 
 export default function Home() {
    const [isAuthenticated, setIsAuthenticated] = useState(false);
-   if (typeof window !== 'undefined' && window.localStorage) {
-   const tokenExpiryDate = window.localstorage.getItem('expirydate');}
+   // if (typeof window !== 'undefined' && window.localStorage) {
+   // const tokenExpiryDate = window.localstorage.getItem('expirydate');}
 
    useEffect(() => {
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -21,13 +21,13 @@ export default function Home() {
       setIsAuthenticated(isAuthenticated);}
    }, []);
 
-   useEffect(() => {
-      if (isTokenExpired(tokenExpiryDate)) {
-         // Redirect to login page if expired
-         setIsAuthenticated(false);
-         window.location.href='/login'
-        }
-   }, [tokenExpiryDate]);
+   // useEffect(() => {
+   //    if (isTokenExpired(tokenExpiryDate)) {
+   //       // Redirect to login page if expired
+   //       setIsAuthenticated(false);
+   //       window.location.href='/login'
+   //      }
+   // }, [tokenExpiryDate]);
 
    if (!isAuthenticated) {
       return null; // Or loading indicator
