@@ -8,6 +8,7 @@ import HeroComp from "@/components/Dashboard/HeroComp";
 import ChartComp from "@/components/Dashboard/Chart-Comp";
 import Snapshot from "@/components/Dashboard/Snapshot";
 import { isTokenExpired } from '@/components/Auth/Auth_login';
+import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 
 export default function Home() {
    const [isAuthenticated, setIsAuthenticated] = useState(false);
