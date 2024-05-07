@@ -37,13 +37,18 @@ export const loginUser = (userName, password, router) => {
       )
       .then((response) => {
         // Storing user data in local storage
+        localStorage.setItem("token", response.data.tokenDto.token);
+        localStorage.setItem("expirydate", response.data.tokenDto.
+        expiryInMinutes);
+
         localStorage.setItem("userData", JSON.stringify(response.data));
+
         
         // Dispatching an action to indicate successful login
         dispatch(loginSuccess(userName));
-        
+        const validate = response.data.tokenDto.googleAuthenticationEnabled
         // Navigating to different pages based on conditions
-        if (response.data.tokenDto.googleAuthenticationEnabled === false) {
+        if ( validate=== false) {
           Toast( "sucess" ,'Login sucessfully');
 
           router.push("/first-time-login");

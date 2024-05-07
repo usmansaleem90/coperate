@@ -13,12 +13,13 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "@/redux/actions/authActions";
 import Toast from "../../../components/Toast/Toast";
+import './login.css'
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  // const { isLoading, isAuthenticated, error } = useSelector(
-  //   (state) => state.auth
-  // );
+  const { isLoading } = useSelector(
+    (state) => state.auth
+  );
   const router = useRouter();
   const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -95,8 +96,16 @@ const LoginPage = () => {
               onChange={(event) => setPassword(event.target.value)} // Pass the onChange event handler
             />
           </FormInputWrapper>
+           {
+            !isLoading ?(
+              <Button onClick={handleSubmit}>Login</Button>
 
-          <Button onClick={handleSubmit}>Login</Button>
+            ):(
+              <p className="spinner"></p>
+              // <Button className='spinner'></Button>
+
+            )
+           }
           {/* {error && <p style={{ color: "red" }}>{loginErr}</p>}
           {isLoading && <p>Loading...</p>} */}
         </div>

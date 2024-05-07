@@ -33,6 +33,10 @@ const Sidebar = ({ onClick }) => {
         localStorage.removeItem('qrcode')
         localStorage.removeItem('ally-supports-cache')
         localStorage.removeItem('userData')
+        localStorage.removeItem('token')
+        localStorage.removeItem('expirydate')
+
+
         window.location.href='/login'
     };
 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "@/redux/actions/newPasswordActions";
@@ -7,14 +7,23 @@ import Button from "@/components/UI/form-button";
 import FormInputWrapper from "@/components/UI/form-input-wrapper";
 import InputWrapper from "@/components/UI/input-wrapper";
 import LabelWrapper from "@/components/UI/label-wrapper";
+import ReactPasswordChecklist from "react-password-checklist";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  lowerCaseRegex,
+  upperCaseRegex,
+  maxLengthRegex,
+  specialCharRegex,
+  minLengthRegex,
+  numberRegex,
+} from "@/components/Const/regex";
+import { Toast } from "react-bootstrap";
 
 const NewPasswordPage = () => {
-  const router=useRouter();
+  const router = useRouter();
   const dispatch = useDispatch();
-  const userId = localStorage.getItem('userId');
-  const newPasswordState = useSelector(state => state.newPassword);
+  const newPasswordState = useSelector((state) => state.newPassword);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [totp, setTotp] = useState("");
@@ -22,16 +31,38 @@ const NewPasswordPage = () => {
 
   const handleInputChange = (e, index) => {
     const newValue = e.target.value;
-  
+
     if (newValue.length === 1 && index < otpRefs.current.length - 1) {
       otpRefs.current[index + 1].focus();
     }
-    
+
     // Update totp state with concatenated value of all OTP inputs
-    let newTotp = otpRefs.current.map(ref => ref.value).join("");
+    let newTotp = otpRefs.current.map((ref) => ref.value).join("");
     setTotp(newTotp);
   };
-  
+
+  const [validations, setValidations] = useState({
+    hasLowerCase: false,
+    hasUpperCase: false,
+    hasNumber: false,
+    hasMinLength: false,
+    hasMaxLength: false,
+  });
+
+  const validatePassword = (newPass) => {
+    const hasLowerCase = lowerCaseRegex.test(newPass);
+    const hasUpperCase = upperCaseRegex.test(newPass);
+    const hasNumber = numberRegex.test(newPass);
+    const hasMinLength = minLengthRegex.test(newPass);
+    const hasSpecialChar = specialCharRegex.test(newPass); // Check for special character
+    setValidations({
+      hasLowerCase,
+      hasUpperCase,
+      hasNumber,
+      hasMinLength,
+      hasSpecialChar,
+    });
+  };
 
   useEffect(() => {
     otpRefs.current[0].focus();
@@ -39,10 +70,24 @@ const NewPasswordPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!password) {
+      Toast("err", "Please Enter Password");
+      return;
+    }
+    if (
+      !validations?.hasLowerCase ||
+      !validations?.hasMinLength ||
+      !validations?.hasNumber ||
+      !validations?.hasUpperCase ||
+      !validations?.hasSpecialChar
+    ) {
+      // Update conditions
+      return;
+    }
     if (password !== confirmPassword) {
       return;
     }
-    dispatch(changePassword(password, totp,router));
+    dispatch(changePassword(password, totp, router));
   };
 
   return (
@@ -72,7 +117,10 @@ const NewPasswordPage = () => {
                   placeholderColor={true}
                   link={""}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    validatePassword(e.target.value);
+                  }}
                 />
               </FormInputWrapper>
               <FormInputWrapper>
@@ -87,6 +135,30 @@ const NewPasswordPage = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </FormInputWrapper>
+              <ReactPasswordChecklist
+                style={{ marginTop: "10px" }}
+                rules={[
+                  "minLength",
+                  "specialChar",
+                  "number",
+                  "capital",
+                  "lowercase",
+                  'match'
+
+
+                ]}
+                minLength={10}
+                value={password}
+                valueAgain={confirmPassword}
+                messages={{
+                  minLength: "Password length minimum 8 characters",
+                  specialChar: "Password has special character.",
+                  number: "Password has number.",
+                  capital: "Password has a capital letter",
+                  lowercase: "Password has a lowercase letter",
+                  match:'Password and confirm password does not match'
+                }}
+              />
             </div>
 
             {/* two factor container */}
