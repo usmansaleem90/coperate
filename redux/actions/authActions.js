@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Toast  from "../../components/Toast/Toast";
+import Cookies from 'js-cookie';
 
 // Action creators
 export const loginRequest = () => ({
@@ -36,12 +37,11 @@ export const loginUser = (userName, password, router) => {
         }
       )
       .then((response) => {
-        if (typeof window !== 'undefined' && window.localStorage) {
-        window.localstorage.setItem("token", response.data.tokenDto.token);
-        window.localstorage.setItem("expirydate", response.data.tokenDto.
-        expiryInMinutes);
+      
+        Cookies.set("token", response.data.tokenDto.token);
+      
 
-        window.localstorage.setItem("userData", JSON.stringify(response.data));}
+        Cookies.set("userData", JSON.stringify(response.data));
 
         
         // Dispatching an action to indicate successful login

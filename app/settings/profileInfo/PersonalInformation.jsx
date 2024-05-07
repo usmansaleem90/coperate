@@ -1,11 +1,70 @@
-import React from 'react'
+
+'use client'
+import React, { useEffect, useState } from 'react'
 import circle from '@/public/images/circle.svg'
 import { AiFillEdit } from "react-icons/ai";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
-
-
+import axios from 'axios';
+import { data } from 'autoprefixer';
+import Cookies from 'js-cookie';
 const PersonalInformation = () => {
+    const [userData, setUserData] = useState(null);
+
+  useEffect(()=>{
+    const getdata = async () => {
+       
+
+        try {
+          const userDataString = Cookies.get("userData");
+          if (!userDataString) {
+            throw new Error("User data not found in local storage");
+          }
+    
+          console.log("Retrieved userData:", userDataString);
+          const userData = JSON.parse(userDataString);
+    
+          const tokenDto = userData.tokenDto;
+          if (!tokenDto) {
+            throw new Error("Token data not found in userData");
+          }
+    
+         
+          const token = tokenDto.token;
+          const memberId = tokenDto.memberId;
+          const response = await fetch(`https://oxygentestenv01.oxygen-global.com/cardholderadmin/private/profile/read/${memberId}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Token ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+            if(response){
+    
+              const responseData = await response.json();
+            console.log(responseData)
+            setUserData(responseData)
+            }
+          if (!response.ok) {
+            let errorMessage = 'Unknown error occurred';
+            if (response.status === 401) {
+              errorMessage = 'Unauthorized: Check your authentication credentials';
+            } else {
+              errorMessage = `HTTP error! Status: ${response.status}`;
+            }
+            throw new Error(errorMessage);
+          }
+    
+        
+        } catch (error) {
+          console.error("Error:", error);
+          
+        }
+ 
+    };
+    getdata()
+  } , [])
+      
 
     const router = useRouter()
 
@@ -18,15 +77,18 @@ const PersonalInformation = () => {
                     Edit
                 </button>
             </div>
-            <div className='xl:w-[73%] w-full flex flex-col gap-10 mt-4'>
+         {
+            userData && (
+                <>
+                   <div className='xl:w-[73%] w-full flex flex-col gap-10 mt-4'>
                 <div className='grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-20 gap-6' >
                     <div className='flex flex-col gap-1'>
                         <p className='text-sm text-primary' >Name</p>
-                        <p className='text-black md:whitespace-nowrap' >Name Here</p>
+                        <p className='text-black md:whitespace-nowrap' >{userData.firstName}</p>
                     </div>
                     <div className='flex flex-col gap-1'>
                         <p className='text-sm text-primary' >Contact Number</p>
-                        <p className='text-black md:whitespace-nowrap' >+44 123 456 7890</p>
+                        <p className='text-black md:whitespace-nowrap' >{userData.mobileNumber}</p>
                     </div>
                     <div className='flex flex-col gap-1'>
                         <p className='text-sm text-primary' >Status</p>
@@ -36,11 +98,11 @@ const PersonalInformation = () => {
                 <div className='grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-20 gap-6' >
                     <div className='flex flex-col gap-1'>
                         <p className='text-sm text-primary whitespace-nowrap' >Date Of  Birth</p>
-                        <p className='text-black md:whitespace-nowrap' >Nov 23, 2000</p>
+                        <p className='text-black md:whitespace-nowrap' >{userData.dateofbirth}</p>
                     </div>
                     <div className='flex flex-col gap-1'>
                         <p className='text-sm text-primary' >Email ID</p>
-                        <p className=' md:whitespace-nowrap whitespace-wrap' >namehere@gmail .com</p>
+                        <p className=' md:whitespace-nowrap whitespace-wrap' >{userData.emailId}</p>
                     </div>
                     <div className='flex flex-col gap-1'>
                         <p className='text-sm text-primary' >Role</p>
@@ -65,8 +127,12 @@ const PersonalInformation = () => {
                         <Image src={circle} alt="" />
                         <p>MIT Triton Card</p>
                     </div>
+                    {/* <button onClick={getQRCode}>usman</button> */}
                 </div>
             </div>
+                </>
+            )
+         }
         </div>
     )
 }

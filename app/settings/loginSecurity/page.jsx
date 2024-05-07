@@ -1,12 +1,81 @@
 "use client";
 
+import AuthWrapper from "@/components/Auth/Auth-Wrapper";
 import DashboardWrapper from "@/components/Dashboard/Dashboard-Wrapper";
 import LoginAUthWrapper from "@/components/Settings/LoginAUthWrapper";
+import FormInputWrapper from "@/components/UI/form-input-wrapper";
+import InputWrapper from "@/components/UI/input-wrapper";
+import LabelWrapper from "@/components/UI/label-wrapper";
 import { useState } from "react";
-
+import Image from "next/image";
+import Button from "@/components/UI/form-button";
+import forgotPasswordImg from "@/public/images/forgot-password-icon.svg";
+import axios from "axios";
+import Toast from "@/components/Toast/Toast";
+import Cookies from "js-cookie";
 const LoginPage = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [answer, setAnswer] = useState("");
+  // 
+// update password
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
+  // 
+
+  const updatePassword = () => {
+    // Validate password fields
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      setError("Please fill in all password fields.");
+      Toast("err" ,'"Please fill in all password fields')
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setError("New password and confirm password do not match.");
+      Toast("err" ,'"New password and confirm password do not match.')
+
+      return;
+    }
+
+   
+ 
+      const userDataString = Cookies.get("userData");
+
+      const userData = JSON.parse(userDataString);
+
+      const tokenDto = userData.tokenDto
+      const token = tokenDto.token;
+     
+      const accountId = tokenDto.accountId;
+      const requestData = {
+        accountId: accountId,
+        confirmPassword: confirmPassword,
+        newPassword: newPassword,
+        oldPassword: oldPassword,
+
+      };
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`,
+      };
+
+    axios.post('https://oxygentestenv01.oxygen-global.com/cardholderadmin/private/profile/changePassword', requestData , {headers})
+    .then(response => {
+      console.log('Password updated successfully:', response.data);
+      Toast("sucess" , 'Password updated successfully:')
+      setError(null); 
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    })
+    .catch(error => {
+      console.error('Error updating password:', error);
+      Toast("err" , 'Failed to update password. Please try again later')
+      setError('Failed to update password. Please try again later.');
+    });
+  };
+
   return (
     <>
       {/* main container */}
@@ -15,6 +84,73 @@ const LoginPage = () => {
         title2={"Dashboard - Settings"}
         top={true}
       >
+           <AuthWrapper>
+        <div className="flex flex-col items-start justify-around w-full h-full border max-lg:min-h-screen max-md:gap-8">
+          {/* top container */}
+          <div className="w-full h-auto space-y-8">
+            {/* forgot password image */}
+            <div className="w-[60%] h-auto mx-auto">
+              <Image
+                src={forgotPasswordImg}
+                alt="forgotPasswordImg"
+                width={500}
+                height={500}
+                className="object-contain w-[60%] mx-auto h-auto"
+              />
+              {/* forgotpassword div */}
+              <div className="flex flex-col text-[#334155] items-center justify-start text-center mx-auto w-full h-auto text-base font-normal leading-5 space-y-2">
+                <h1 className="text-xl font-bold text-black">
+                  Update Password
+                </h1>
+                <span className="">
+                  Enter your Current Password and New Password to Update your Password.
+                </span>
+              </div>
+            </div>
+            {/* input wrapper */}
+            <div className="md:w-[70%] w-[90%] h-auto mx-auto">
+              <FormInputWrapper>
+                <LabelWrapper>Enter your Current Password</LabelWrapper>
+                <InputWrapper
+                  placeholder={"Type here"}
+                  type={"password"}
+                  link={""}
+                  placeholderColor={false}
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+              </FormInputWrapper>
+              <FormInputWrapper >
+                <LabelWrapper>Enter your New Password</LabelWrapper>
+                <InputWrapper
+                  placeholder={"Type here"}
+                  type={"password"}
+                  link={""}
+                  placeholderColor={false}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </FormInputWrapper>
+              <FormInputWrapper>
+                <LabelWrapper>Confirm Password</LabelWrapper>
+                <InputWrapper
+                  placeholder={"Type here"}
+                  type={"password"}
+                  link={""}
+                  placeholderColor={false}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </FormInputWrapper>
+            </div>
+          </div>
+          {error && <div className="text-red-500">{error}</div>}
+          {/* button  */}
+          <div className="md:w-[70%] w-[90%] mx-auto h-auto ">
+            <Button onClick={updatePassword}>Continue</Button>
+          </div>
+        </div>
+      </AuthWrapper>
         <div className="w-full h-auto p-[2%] space-y-5">
           <div className="w-full p-[2%] h-auto flex justify-start items-start bg-white flex-col gap-2 rounded-[10px]">
             <h1 className="text-[#000000] text-base font-bold leading-5">
@@ -256,5 +392,4 @@ const LoginPage = () => {
     </>
   );
 };
-
 export default LoginPage;

@@ -10,8 +10,8 @@ import GoogleImg from "@/public/images/google.svg";
 import AppleImg from "@/public/images/apple.svg";
 import QRImg from "@/public/images/QRCode.svg";
 import Toast  from "../../../components/Toast/Toast";
-
 import axios from "axios";
+import Cookies from 'js-cookie';
 const FirstTimeLoginPage = () => {
   const dispatch = useDispatch();
   const qrCodeUrl = useSelector((state) => state.qrCodeUrl);
@@ -40,20 +40,16 @@ const FirstTimeLoginPage = () => {
     otpRefs.current[0].focus();
   }, []);
 
-  // if (error) {
-  //   return <div>Error: {error}</div>;
-  // }
-  if (typeof window !== 'undefined' && window.localStorage) {
-  var code = window.localstorage.getItem("qrcode")}
+ 
+  var code = Cookies.get("qrcode")
 
-  console.log("QR Code URL:", qrCodeUrl); 
+
 
 
 
   const handleContinue = () => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-    const userDataString = window.localstorage.getItem("userData");
-    }
+    const userDataString = Cookies.get("userData");
+
     if (!userDataString) {
       setError("User data not found in local storage");
       return;
@@ -67,8 +63,8 @@ const FirstTimeLoginPage = () => {
   
     axios
       .post("https://oxygentestenv01.oxygen-global.com/cardholderadmin/gAuth/validate/totp", {
-        email: emailId, // Corrected to match the API's expected key
-        userId: memberId, // Corrected to match the API's expected key
+        email: emailId, 
+        userId: memberId, 
         totp: totp,
       })
       .then((response) => {
@@ -76,7 +72,7 @@ const FirstTimeLoginPage = () => {
        
         console.log("TOTP verification successful");
         window.location.href = '/forgot-password/new-password';
-        // Router.push('/forgot-password/new-password')
+        
       })
       .catch((error) => {
         Toast( "err" , 'verification failed , InValid OTP');
@@ -85,9 +81,6 @@ const FirstTimeLoginPage = () => {
       });
   };
   
-// if (error) {
-//   return <div>Error: {error}</div>;
-// }
 
   
 

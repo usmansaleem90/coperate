@@ -4,6 +4,7 @@ export const FLOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const FLOGIN_FAILURE = "LOGIN_FAILURE";
 
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export const LoginRequest = (email, otp) => {
   return async (dispatch) => {
@@ -11,8 +12,8 @@ export const LoginRequest = (email, otp) => {
     try {
       const response = await axios.post("https://oxygentestenv01.oxygen-global.com/cardholderadmin/corporateOrdering/validate/totp/ForgotUserId", { email, otp });
 
-      if (typeof window !== 'undefined' && window.localStorage) {
-      window.localstorage.setItem("email", email);}
+      
+        Cookies.set("email", email);
 
       dispatch({ type: FLOGIN_SUCCESS, payload: response.data });
     } catch (error) {

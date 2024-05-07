@@ -1,5 +1,6 @@
 // Import any necessary dependencies
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // Action Types
 export const FETCH_QR_CODE_REQUEST = "FETCH_QR_CODE_REQUEST";
@@ -27,8 +28,8 @@ export const getQRCode = () => {
 
     try {
       // Step 1: Retrieve userData from local storage
-      if (typeof window !== 'undefined' && window.localStorage) {
-      const userDataString = window.localstorage.getItem("userData");}
+    
+      const userDataString = Cookies.get("userData");
       if (!userDataString) {
         throw new Error("User data not found in local storage");
       }
@@ -71,8 +72,8 @@ export const getQRCode = () => {
 
           const responseData = await response.json();
           const qrCodeUrl = responseData.qrCode;
-          if (typeof window !== 'undefined' && window.localStorage) {
-          window.localstorage.setItem("qrcode" , qrCodeUrl)}
+          
+          Cookies.set("qrcode" , qrCodeUrl)
         }
       if (!response.ok) {
         let errorMessage = 'Unknown error occurred';

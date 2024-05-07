@@ -11,27 +11,7 @@ import { isTokenExpired } from '@/components/Auth/Auth_login';
 import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 
 export default function Home() {
-   const [isAuthenticated, setIsAuthenticated] = useState(false);
-   // if (typeof window !== 'undefined' && window.localStorage) {
-   // const tokenExpiryDate = window.localstorage.getItem('expirydate');}
-
-   useEffect(() => {
-      if (typeof window !== 'undefined' && window.localStorage) {
-      const isAuthenticated = window.localstorage.getItem('token');
-      setIsAuthenticated(isAuthenticated);}
-   }, []);
-
-   // useEffect(() => {
-   //    if (isTokenExpired(tokenExpiryDate)) {
-   //       // Redirect to login page if expired
-   //       setIsAuthenticated(false);
-   //       window.location.href='/login'
-   //      }
-   // }, [tokenExpiryDate]);
-
-   if (!isAuthenticated) {
-      return null; // Or loading indicator
-   }
+   
 
    return (
       <DashboardWrapper

@@ -36,10 +36,6 @@ const LoginPage = () => {
       return;
     }
 
-    // if (error) {
-    //   Toast("err", "Invalid Email and Password");
-    //   return;
-    // }
 
     event.preventDefault();
     try {
@@ -49,10 +45,6 @@ const LoginPage = () => {
     }
   };
 
-  // Display the error message from state
-  // useEffect(() => {
-
-  // }, [error]);
 
   return (
     <AuthWrapper>
@@ -92,8 +84,8 @@ const LoginPage = () => {
               link={"/forgot-password"}
               placeholder={"Type here"}
               type={"password"}
-              value={password} // Pass the value
-              onChange={(event) => setPassword(event.target.value)} // Pass the onChange event handler
+              value={password} 
+              onChange={(event) => setPassword(event.target.value)}
             />
           </FormInputWrapper>
            {
@@ -102,12 +94,10 @@ const LoginPage = () => {
 
             ):(
               <p className="spinner"></p>
-              // <Button className='spinner'></Button>
+             
 
             )
            }
-          {/* {error && <p style={{ color: "red" }}>{loginErr}</p>}
-          {isLoading && <p>Loading...</p>} */}
         </div>
       </div>
     </AuthWrapper>

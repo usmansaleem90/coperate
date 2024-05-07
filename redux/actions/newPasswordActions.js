@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Toast from '../../components/Toast/Toast';
+import Cookies from 'js-cookie';
 
 // Action Types
 export const NEW_PASSWORD_REQUEST = 'NEW_PASSWORD_REQUEST';
@@ -31,8 +32,8 @@ export const changePassword = (password, totp,router) => {
           'Password must be at least 8 characters long, contain at least one uppercase letter, and at least one special character.'
         );
       }
-      if (typeof window !== 'undefined' && window.localStorage) {
-      const userDataString = window.localstorage.getItem("userData")};
+      
+      const userDataString = Cookies.get("userData");
       if (!userDataString) {
         setError("User data not found in local storage");
         return;
@@ -53,8 +54,8 @@ export const changePassword = (password, totp,router) => {
       console.log('Response:', response.data);
       router.push('/')
     } catch (error) {
-      if (typeof window !== 'undefined' && window.localStorage) {
-      dispatch(newPasswordFailure(error.message, password, totp, window.localstorage.getItem('userId')))};
+    
+      dispatch(newPasswordFailure(error.message, password, totp, Cookies.get('userId')));
       console.error('Error changing password:', error.message);
       console.log('Password:', password);
       console.log('TOTP:', totp);

@@ -1,6 +1,6 @@
 'use client'
 // * imports
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { useSelector, } from 'react-redux'; // Import the useSelector hook to access state from the Redux store
 
 // * local imports
@@ -14,9 +14,66 @@ import { MdExpandMore } from "react-icons/md";
 import arrow from '@/public/images/buttonArrow.svg'
 import { AiOutlineClose } from "react-icons/ai";
 import { Router } from "react-router-dom";
+import Cookies from "js-cookie";
 
 
 const Sidebar = ({ onClick }) => {
+
+    const [userData, setUserData] = useState(null);
+
+    useEffect(()=>{
+      const getdata = async () => {
+         
+  
+          try {
+            const userDataString = Cookies.get("userData");
+            if (!userDataString) {
+              throw new Error("User data not found in local storage");
+            }
+      
+            console.log("Retrieved userData:", userDataString);
+            const userData = JSON.parse(userDataString);
+      
+            const tokenDto = userData.tokenDto;
+            if (!tokenDto) {
+              throw new Error("Token data not found in userData");
+            }
+      
+           
+            const token = tokenDto.token;
+            const memberId = tokenDto.memberId;
+            const response = await fetch(`https://oxygentestenv01.oxygen-global.com/cardholderadmin/private/profile/read/${memberId}`, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+              if(response){
+      
+                const responseData = await response.json();
+              console.log(responseData)
+              setUserData(responseData)
+              }
+            if (!response.ok) {
+              let errorMessage = 'Unknown error occurred';
+              if (response.status === 401) {
+                errorMessage = 'Unauthorized: Check your authentication credentials';
+              } else {
+                errorMessage = `HTTP error! Status: ${response.status}`;
+              }
+              throw new Error(errorMessage);
+            }
+      
+          
+          } catch (error) {
+            console.error("Error:", error);
+            
+          }
+   
+      };
+      getdata()
+    } , [])
     const {isAuthenticated} = useSelector(
         (state) => state.auth
       );
@@ -31,11 +88,11 @@ const Sidebar = ({ onClick }) => {
     };
     const isLogout = () => {
         if (typeof window !== 'undefined' && window.localStorage) {
-        window.localstorage.removeItem('qrcode')
-        window.localstorage.removeItem('ally-supports-cache')
-        window.localstorage.removeItem('userData')
-        window.localstorage.removeItem('token')
-        window.localstorage.removeItem('expirydate')}
+            Cookies.remove('qrcode')
+            Cookies.remove('ally-supports-cache')
+        Cookies.remove('userData')
+        Cookies.remove('token')
+        Cookies.remove('expirydate')}
 
 
         window.location.href='/login'
@@ -341,14 +398,19 @@ const Sidebar = ({ onClick }) => {
                             height={500}
                             className={`object-contain rounded-full ${setShowSidebar ? 'w-9 h-9' : 'w-11 h-11'} `}
                         />
-                        <div className={`${showSiderbar ? 'hidden' : 'flex'} flex-col items-start justify-center w-auto h-auto`}>
+                       {
+                        userData && (
+
+                            <div className={`${showSiderbar ? 'hidden' : 'flex'} flex-col items-start justify-center w-auto h-auto`}>
                             <span className="text-[#000000] font-bold text-sm leading-4">
-                                User Name here
+                                {userData.firstName}
                             </span>
                             <span className="text-[#3F3F46] text-xs font-normal leading-4">
-                                namehere@gmail.com
+                                {userData.emailId}
                             </span>
                         </div>
+                        )
+                       }
                     </div>
                 </div>
             </div>

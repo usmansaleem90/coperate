@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 // Action types
 export const FORGOT_PASSWORD_REQUEST = 'FORGOT_PASSWORD_REQUEST';
 export const FORGOT_PASSWORD_SUCCESS = 'FORGOT_PASSWORD_SUCCESS';
@@ -29,8 +31,8 @@ export const forgotPasswordRequest = (username, router) => async (dispatch) => {
     // Parse the response JSON
     const responseData = await response.json();
 
-    if (typeof window !== 'undefined' && window.localStorage) {
-    window.localstorage.setItem('userData', JSON.stringify(responseData));}
+
+    Cookies.set('userData', JSON.stringify(responseData));
 
     // Navigate to a new screen (replace '/new-screen' with the actual path)
     router.push('/forgot-password/new-password');
