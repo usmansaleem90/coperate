@@ -43,14 +43,14 @@ const FirstTimeLoginPage = () => {
   // if (error) {
   //   return <div>Error: {error}</div>;
   // }
-  const code = localStorage.getItem("qrcode")
+  const code = window.localstorage.getItem("qrcode")
 
   console.log("QR Code URL:", qrCodeUrl); 
 
 
 
   const handleContinue = () => {
-    const userDataString = localStorage.getItem("userData");
+    const userDataString = window.localstorage.getItem("userData");
     if (!userDataString) {
       setError("User data not found in local storage");
       return;

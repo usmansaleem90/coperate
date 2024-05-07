@@ -12,10 +12,10 @@ import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 
 export default function Home() {
    const [isAuthenticated, setIsAuthenticated] = useState(false);
-   const tokenExpiryDate = localStorage.getItem('expirydate');
+   const tokenExpiryDate = window.localstorage.getItem('expirydate');
 
    useEffect(() => {
-      const isAuthenticated = localStorage.getItem('token');
+      const isAuthenticated = window.localstorage.getItem('token');
       setIsAuthenticated(isAuthenticated);
    }, []);
 

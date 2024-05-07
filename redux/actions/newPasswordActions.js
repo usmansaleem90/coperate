@@ -32,7 +32,7 @@ export const changePassword = (password, totp,router) => {
         );
       }
 
-      const userDataString = localStorage.getItem("userData");
+      const userDataString = window.localstorage.getItem("userData");
       if (!userDataString) {
         setError("User data not found in local storage");
         return;
@@ -53,11 +53,11 @@ export const changePassword = (password, totp,router) => {
       console.log('Response:', response.data);
       router.push('/')
     } catch (error) {
-      dispatch(newPasswordFailure(error.message, password, totp, localStorage.getItem('userId')));
+      dispatch(newPasswordFailure(error.message, password, totp, window.localstorage.getItem('userId')));
       console.error('Error changing password:', error.message);
       console.log('Password:', password);
       console.log('TOTP:', totp);
-      console.log('User ID:', localStorage.getItem('userId'));
+      console.log('User ID:', window.localstorage.getItem('userId'));
     }
   };
 };
