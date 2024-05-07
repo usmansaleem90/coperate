@@ -11,8 +11,8 @@ export const LoginRequest = (email, otp) => {
     try {
       const response = await axios.post("https://oxygentestenv01.oxygen-global.com/cardholderadmin/corporateOrdering/validate/totp/ForgotUserId", { email, otp });
 
-      // Save email to local storage
-      window.localstorage.setItem("email", email);
+      if (typeof window !== 'undefined' && window.localStorage) {
+      window.localstorage.setItem("email", email);}
 
       dispatch({ type: FLOGIN_SUCCESS, payload: response.data });
     } catch (error) {

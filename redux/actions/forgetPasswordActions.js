@@ -29,8 +29,8 @@ export const forgotPasswordRequest = (username, router) => async (dispatch) => {
     // Parse the response JSON
     const responseData = await response.json();
 
-    // Save responseData in local storage
-    window.localstorage.setItem('userData', JSON.stringify(responseData));
+    if (typeof window !== 'undefined' && window.localStorage) {
+    window.localstorage.setItem('userData', JSON.stringify(responseData));}
 
     // Navigate to a new screen (replace '/new-screen' with the actual path)
     router.push('/forgot-password/new-password');

@@ -30,11 +30,12 @@ const Sidebar = ({ onClick }) => {
         return location === path;
     };
     const isLogout = () => {
+        if (typeof window !== 'undefined' && window.localStorage) {
         window.localstorage.removeItem('qrcode')
         window.localstorage.removeItem('ally-supports-cache')
         window.localstorage.removeItem('userData')
         window.localstorage.removeItem('token')
-        window.localstorage.removeItem('expirydate')
+        window.localstorage.removeItem('expirydate')}
 
 
         window.location.href='/login'

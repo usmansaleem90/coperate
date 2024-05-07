@@ -31,8 +31,8 @@ export const changePassword = (password, totp,router) => {
           'Password must be at least 8 characters long, contain at least one uppercase letter, and at least one special character.'
         );
       }
-
-      const userDataString = window.localstorage.getItem("userData");
+      if (typeof window !== 'undefined' && window.localStorage) {
+      const userDataString = window.localstorage.getItem("userData")};
       if (!userDataString) {
         setError("User data not found in local storage");
         return;
@@ -53,11 +53,13 @@ export const changePassword = (password, totp,router) => {
       console.log('Response:', response.data);
       router.push('/')
     } catch (error) {
-      dispatch(newPasswordFailure(error.message, password, totp, window.localstorage.getItem('userId')));
+      if (typeof window !== 'undefined' && window.localStorage) {
+      dispatch(newPasswordFailure(error.message, password, totp, window.localstorage.getItem('userId')))};
       console.error('Error changing password:', error.message);
       console.log('Password:', password);
       console.log('TOTP:', totp);
-      console.log('User ID:', window.localstorage.getItem('userId'));
+      // console.log('User ID:', window.localstorage.getItem('userId'));
+
     }
   };
 };

@@ -27,7 +27,8 @@ export const getQRCode = () => {
 
     try {
       // Step 1: Retrieve userData from local storage
-      const userDataString = window.localstorage.getItem("userData");
+      if (typeof window !== 'undefined' && window.localStorage) {
+      const userDataString = window.localstorage.getItem("userData");}
       if (!userDataString) {
         throw new Error("User data not found in local storage");
       }
@@ -70,7 +71,8 @@ export const getQRCode = () => {
 
           const responseData = await response.json();
           const qrCodeUrl = responseData.qrCode;
-          window.localstorage.setItem("qrcode" , qrCodeUrl)
+          if (typeof window !== 'undefined' && window.localStorage) {
+          window.localstorage.setItem("qrcode" , qrCodeUrl)}
         }
       if (!response.ok) {
         let errorMessage = 'Unknown error occurred';

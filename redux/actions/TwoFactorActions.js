@@ -25,7 +25,8 @@ export const verifyOTP = (otpValue, router) => {
       console.log("OTP verification initiated");
 
       // Retrieve email and userId from local storage
-      const userData = JSON.parse(window.localstorage.getItem("userData"));
+      if (typeof window !== 'undefined' && window.localStorage) {
+      const userData = JSON.parse(window.localstorage.getItem("userData"));}
       const email = userData?.tokenDto?.emailId;
       const userId = userData?.tokenDto?.accountId;
 

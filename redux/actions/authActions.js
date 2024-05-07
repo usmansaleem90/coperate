@@ -36,12 +36,12 @@ export const loginUser = (userName, password, router) => {
         }
       )
       .then((response) => {
-        // Storing user data in local storage
+        if (typeof window !== 'undefined' && window.localStorage) {
         window.localstorage.setItem("token", response.data.tokenDto.token);
         window.localstorage.setItem("expirydate", response.data.tokenDto.
         expiryInMinutes);
 
-        window.localstorage.setItem("userData", JSON.stringify(response.data));
+        window.localstorage.setItem("userData", JSON.stringify(response.data));}
 
         
         // Dispatching an action to indicate successful login
