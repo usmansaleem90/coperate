@@ -36,7 +36,8 @@ const FirstTimeLoginPage = () => {
       setError(error.message || "Failed to fetch QR code");
     });
   }, [dispatch]);
-  var code = getQr()
+  if (typeof window !== 'undefined') {
+  var code = getQr()}
   useEffect(() => {
     otpRefs.current[0].focus();
     
@@ -50,8 +51,8 @@ const FirstTimeLoginPage = () => {
 
 
   const handleContinue = () => {
-  
-    var userDataString = getdata();
+    if (typeof window !== 'undefined') {
+    var userDataString = getdata();}
 
     
   
