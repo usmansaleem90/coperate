@@ -71,3 +71,7 @@ export const loginUser = (userName, password, router) => {
       });
   };
 };
+export const getdata = () =>{
+ const data = sessionStorage.getItem("userData")
+ return data
+}
