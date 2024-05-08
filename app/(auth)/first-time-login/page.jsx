@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getQRCode } from "@/redux/actions/qrCodeAction";
+import { getQr, getdata } from "@/redux/actions/authActions";
 import Link from "next/link";
 import Button from "@/components/UI/form-button";
 import {QRCodeSVG} from 'qrcode.react';
@@ -35,7 +36,7 @@ const FirstTimeLoginPage = () => {
       setError(error.message || "Failed to fetch QR code");
     });
   }, [dispatch]);
-  var code = sessionStorage.getItem("qrcode")
+  var code = getQr()
   useEffect(() => {
     otpRefs.current[0].focus();
     
@@ -49,13 +50,10 @@ const FirstTimeLoginPage = () => {
 
 
   const handleContinue = () => {
-    if (typeof window !== 'undefined') {
-    var userDataString = sessionStorage.getItem("userData");}
+  
+    var userDataString = getdata();
 
-    if (!userDataString) {
-      setError("User data not found in local storage");
-      return;
-    }
+    
   
     const userData = JSON.parse(userDataString).tokenDto;
     const emailId = userData.emailId;

@@ -75,3 +75,11 @@ export const getdata = () =>{
  const data = sessionStorage.getItem("userData")
  return data
 }
+export const getQr = () =>{
+  const data = sessionStorage.getItem("qrcode")
+  return data
+ }
+ export const gettoken = () =>{
+  const data = sessionStorage.getItem("token")
+  return data
+ }

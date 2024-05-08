@@ -10,10 +10,11 @@ import Snapshot from "@/components/Dashboard/Snapshot";
 import { isTokenExpired } from '@/components/Auth/Auth_login';
 import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 import LoginPage from './(auth)/login/page';
+import { gettoken } from '@/redux/actions/authActions';
 
 export default function Home() {
    
-   const isLogged = sessionStorage.getItem('token');
+   const isLogged = gettoken();
    useEffect(() => {
       if (!isLogged) {
         window.location.href ='/login';
