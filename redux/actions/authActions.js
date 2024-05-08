@@ -2,6 +2,7 @@ import axios from 'axios';
 import Toast  from "../../components/Toast/Toast";
 import Cookies from 'js-cookie';
 
+
 // Action creators
 export const loginRequest = () => ({
   type: 'LOGIN_REQUEST',
@@ -37,12 +38,15 @@ export const loginUser = (userName, password, router) => {
         }
       )
       .then((response) => {
-      
-        Cookies.set("token", response.data.tokenDto.token);
-      
+        const userDataString = JSON.stringify(response.data);
+        console.log("Serialized user data:", userDataString);
 
-        Cookies.set("userData", JSON.stringify(response.data));
+        sessionStorage.setItem('userData' ,userDataString)  
+      // Cookies.set("token", response.data.tokenDto.token, { expires: 7 }); // Expires in 7 days
+      //   Cookies.set("userData", userDataString, { expires: 7 });
 
+        // Dispatching an action to indicate successful login
+        dispatch(loginSuccess(userName, response.data));
         
         // Dispatching an action to indicate successful login
         dispatch(loginSuccess(userName));

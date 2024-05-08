@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Toast  from "../../components/Toast/Toast";
+import Cookies from 'js-cookie';
 
 // Action types
 export const VERIFY_OTP_REQUEST = 'VERIFY_OTP_REQUEST';

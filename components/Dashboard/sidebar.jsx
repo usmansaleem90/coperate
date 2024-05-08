@@ -87,12 +87,12 @@ const Sidebar = ({ onClick }) => {
         return location === path;
     };
     const isLogout = () => {
-        if (typeof window !== 'undefined' && window.localStorage) {
+       
             Cookies.remove('qrcode')
             Cookies.remove('ally-supports-cache')
         Cookies.remove('userData')
         Cookies.remove('token')
-        Cookies.remove('expirydate')}
+        Cookies.remove('expirydate')
 
 
         window.location.href='/login'
