@@ -49,7 +49,8 @@ const FirstTimeLoginPage = () => {
 
 
   const handleContinue = () => {
-    const userDataString = sessionStorage.getItem("userData");
+    if (typeof window !== 'undefined') {
+    var userDataString = sessionStorage.getItem("userData");}
 
     if (!userDataString) {
       setError("User data not found in local storage");
