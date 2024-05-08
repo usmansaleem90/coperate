@@ -7,21 +7,25 @@ import DashboardWrapper from "@/components/Dashboard/Dashboard-Wrapper";
 import HeroComp from "@/components/Dashboard/HeroComp";
 import ChartComp from "@/components/Dashboard/Chart-Comp";
 import Snapshot from "@/components/Dashboard/Snapshot";
-import { isTokenExpired } from '@/components/Auth/Auth_login';
+import { isTokenExpired } from '@/components/Auth/Auth_login';import { isTokenExpired } from '@/components/Auth/Auth_login';
 import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 import LoginPage from './(auth)/login/page';
 import { gettoken } from '@/redux/actions/authActions';
 
 export default function Home() {
-   
-   // const isLogged = gettoken();
-   // useEffect(() => {
-   //    if (!isLogged) {
-   //      window.location.href ='/login';
-   //    }
-   //  }, [isLogged]);
+   if (typeof window !== 'undefined') {
+   const isLogged = gettoken();
+   }
+   useEffect(() => {
+      if (!isLogged) {
+        window.location.href ='/login';
+      }
+    }, [isLogged]);
    return (
-   
+      <>
+      {
+         
+         isLogged ? (
             <DashboardWrapper
             title1={"Saturday, November 18"}
             title2={"Good afternoon, Name here"}
@@ -33,6 +37,12 @@ export default function Home() {
                <InvoiceHistroy />
             </div>
          </DashboardWrapper>
+         )
+         :(
+            <LoginPage />
+         )
       
+      }
+      </>
    );
 }
