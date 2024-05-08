@@ -14,17 +14,14 @@ import { gettoken } from '@/redux/actions/authActions';
 
 export default function Home() {
    
-   const isLogged = gettoken();
-   useEffect(() => {
-      if (!isLogged) {
-        window.location.href ='/login';
-      }
-    }, [isLogged]);
+   // const isLogged = gettoken();
+   // useEffect(() => {
+   //    if (!isLogged) {
+   //      window.location.href ='/login';
+   //    }
+   //  }, [isLogged]);
    return (
-      <>
-      {
-         
-         isLogged ? (
+   
             <DashboardWrapper
             title1={"Saturday, November 18"}
             title2={"Good afternoon, Name here"}
@@ -36,12 +33,6 @@ export default function Home() {
                <InvoiceHistroy />
             </div>
          </DashboardWrapper>
-         )
-         :(
-            <LoginPage />
-         )
       
-      }
-      </>
    );
 }
