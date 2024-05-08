@@ -7,7 +7,7 @@ import DashboardWrapper from "@/components/Dashboard/Dashboard-Wrapper";
 import HeroComp from "@/components/Dashboard/HeroComp";
 import ChartComp from "@/components/Dashboard/Chart-Comp";
 import Snapshot from "@/components/Dashboard/Snapshot";
-import { isTokenExpired } from '@/components/Auth/Auth_login';import { isTokenExpired } from '@/components/Auth/Auth_login';
+import { isTokenExpired } from '@/components/Auth/Auth_login';
 import InvoiceHistroy from '@/components/Dashboard/Invoice-History';
 import LoginPage from './(auth)/login/page';
 import { gettoken } from '@/redux/actions/authActions';
