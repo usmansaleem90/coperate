@@ -14,7 +14,7 @@ import { gettoken } from '@/redux/actions/authActions';
 
 export default function Home() {
    if (typeof window !== 'undefined') {
-   const isLogged = gettoken();
+    var isLogged = gettoken();
    }
    useEffect(() => {
       if (!isLogged) {
