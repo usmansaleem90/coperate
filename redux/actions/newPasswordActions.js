@@ -33,7 +33,7 @@ export const changePassword = (password, totp,router) => {
         );
       }
       
-      const userDataString = Cookies.get("userData");
+      const userDataString = sessionStorage.getItem("userData");
       if (!userDataString) {
         setError("User data not found in local storage");
         return;
@@ -55,7 +55,7 @@ export const changePassword = (password, totp,router) => {
       router.push('/')
     } catch (error) {
     
-      dispatch(newPasswordFailure(error.message, password, totp, Cookies.get('userId')));
+      dispatch(newPasswordFailure(error.message, password, totp, sessionStorage.getItem('userId')));
       console.error('Error changing password:', error.message);
       console.log('Password:', password);
       console.log('TOTP:', totp);

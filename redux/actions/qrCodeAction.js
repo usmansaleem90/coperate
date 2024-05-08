@@ -29,7 +29,7 @@ export const getQRCode = () => {
     try {
       // Step 1: Retrieve userData from local storage
     
-      const userDataString = Cookies.get("userData");
+      const userDataString = sessionStorage.getItem("userData");
       if (!userDataString) {
         throw new Error("User data not found in local storage");
       }
@@ -73,7 +73,7 @@ export const getQRCode = () => {
           const responseData = await response.json();
           const qrCodeUrl = responseData.qrCode;
           
-          Cookies.set("qrcode" , qrCodeUrl)
+          sessionStorage.setItem("qrcode" , qrCodeUrl)
         }
       if (!response.ok) {
         let errorMessage = 'Unknown error occurred';

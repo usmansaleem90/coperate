@@ -26,7 +26,7 @@ const Page = () => {
   const handleUpload = () => {
     
 
-    const userDataString = Cookies.get("userData");
+    const userDataString = sessionStorage.getItem("userData");
 
     const userData = JSON.parse(userDataString);
 

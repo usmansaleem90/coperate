@@ -18,7 +18,7 @@ const FirstTimeLoginPage = () => {
   const [error, setError] = useState(null);
   const otpRefs = useRef([]);
   const [otpValue, setOtpValue] = useState("");
-
+   const [username , setusername] = useState("")
  
   const handleInputChange = (e, index) => {
     const newValue = otpValue + e.target.value;
@@ -35,20 +35,21 @@ const FirstTimeLoginPage = () => {
       setError(error.message || "Failed to fetch QR code");
     });
   }, [dispatch]);
-
+  var code = sessionStorage.getItem("qrcode")
   useEffect(() => {
     otpRefs.current[0].focus();
+    
+
   }, []);
 
  
-  var code = Cookies.get("qrcode")
 
 
 
 
 
   const handleContinue = () => {
-    const userDataString = Cookies.get("userData");
+    const userDataString = sessionStorage.getItem("userData");
 
     if (!userDataString) {
       setError("User data not found in local storage");
@@ -57,6 +58,7 @@ const FirstTimeLoginPage = () => {
   
     const userData = JSON.parse(userDataString).tokenDto;
     const emailId = userData.emailId;
+    setusername(emailId)
     const memberId = userData.accountId;
     const totp = otpValue;
     console.log("usman" , emailId , memberId , otpValue)
@@ -69,9 +71,9 @@ const FirstTimeLoginPage = () => {
       })
       .then((response) => {
         Toast( "sucess" ,'verification successful');
+        window.location.href = '/forgot-password/new-password';
        
         console.log("TOTP verification successful");
-        window.location.href = '/forgot-password/new-password';
         
       })
       .catch((error) => {
@@ -189,14 +191,21 @@ const FirstTimeLoginPage = () => {
                   <h1 className="text-[#64748B] text-sm font-bold leading-4">
                     Whose
                   </h1>
-                  <div className="flex flex-col items-center justify-center w-full h-auto md:items-start md:justify-start">
+                 {
+                  username && 
+                  (
+                  <>
+                   <div className="flex flex-col items-center justify-center w-full h-auto md:items-start md:justify-start">
                     <h1 className="text-[#000000] font-bold text-lg leading-9">
-                      Username here
+                    {username}
                     </h1>
                     <span className="text-base font-normal leading-5">
-                      username
+                      {username}
                     </span>
                   </div>
+                  </>
+                  )
+                 }
                 </div>
                 <div className="flex flex-col text-[#334155] md:items-start items-center justify-center md:justify-start md:text-start text-center md:w-full w-[90%] h-auto text-base font-normal leading-5 space-y-2">
                   <h1 className="text-base font-bold text-black md:text-xl">

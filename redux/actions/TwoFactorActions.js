@@ -27,9 +27,9 @@ export const verifyOTP = (otpValue, router) => {
 
       // Retrieve email and userId from local storage
      
-      const userData = JSON.parse(Cookies.get("userData"));
-      const email = userData?.tokenDto?.emailId;
-      const userId = userData?.tokenDto?.accountId;
+      const userData = JSON.parse(sessionStorage.getItem("userData"));
+      const email = userData.tokenDto.emailId;
+      const userId = userData.tokenDto.accountId;
 
       console.log("Retrieved email from local storage:", email);
       console.log("Retrieved userId from local storage:", userId);

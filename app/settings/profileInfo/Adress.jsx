@@ -16,7 +16,7 @@ const Adress = () => {
        
 
         try {
-          const userDataString = Cookies.get("userData");
+          const userDataString = sessionStorage.getItem("userData");
           if (!userDataString) {
             throw new Error("User data not found in local storage");
           }

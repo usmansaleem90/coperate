@@ -26,7 +26,7 @@ const Sidebar = ({ onClick }) => {
          
   
           try {
-            const userDataString = Cookies.get("userData");
+            const userDataString = sessionStorage.getItem("userData");
             if (!userDataString) {
               throw new Error("User data not found in local storage");
             }
@@ -88,11 +88,11 @@ const Sidebar = ({ onClick }) => {
     };
     const isLogout = () => {
        
-            Cookies.remove('qrcode')
-            Cookies.remove('ally-supports-cache')
-        Cookies.remove('userData')
-        Cookies.remove('token')
-        Cookies.remove('expirydate')
+            sessionStorage.removeItem('qrcode')
+            sessionStorage.removeItem('ally-supports-cache')
+        sessionStorage.removeItem('userData')
+        sessionStorage.removeItem('token')
+        sessionStorage.removeItem('expirydate')
 
 
         window.location.href='/login'

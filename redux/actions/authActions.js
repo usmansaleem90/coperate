@@ -42,10 +42,9 @@ export const loginUser = (userName, password, router) => {
         console.log("Serialized user data:", userDataString);
 
         sessionStorage.setItem('userData' ,userDataString)  
-      // Cookies.set("token", response.data.tokenDto.token, { expires: 7 }); // Expires in 7 days
-      //   Cookies.set("userData", userDataString, { expires: 7 });
+        sessionStorage.setItem("token", response.data.tokenDto.token, { expires: 7 });
+      //   sessionStorage.setItem("userData", userDataString, { expires: 7 });
 
-        // Dispatching an action to indicate successful login
         dispatch(loginSuccess(userName, response.data));
         
         // Dispatching an action to indicate successful login
